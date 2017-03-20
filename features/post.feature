@@ -1,10 +1,11 @@
 Feature: Posts
 
-  Scenario: Make get request
+  Scenario: Get lists with valid credentials
     Given client has valid credentials
       When made get list request for posts
-      Then client should return list of posts
+      Then it returns not empty list
 
+  Scenario: Get lists with invalid credentials
     Given client has invalid credentials
       When made get list request for posts
-      Then client should return error
+      Then it throws 403 error
