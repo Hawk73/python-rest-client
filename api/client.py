@@ -1,4 +1,5 @@
 import requests
+import json
 
 
 class Client:
@@ -12,14 +13,14 @@ class Client:
         self._log_request(url)
         response = requests.get(url)
         self._log_response(response)
-        return response
+        return self.decoded_response(response)
 
     def get(self, resources_name, resource_id):
         url = self._make_url('/{:s}/{:d}/'.format(resources_name, resource_id))
         self._log_request(url)
         response = requests.get(url)
         self._log_response(response)
-        return response
+        return self.decoded_response(response)
 
     def post(self, resources_name, data):
         pass
@@ -34,9 +35,13 @@ class Client:
         return self.base_url + path
 
     @staticmethod
+    def decoded_response(response):
+        return json.loads(response.text)
+
+    @staticmethod
     def _log_request(url):
-        print('request', url)
+        print('Making request to url="{:s}"'.format(url))
 
     @staticmethod
     def _log_response(response):
-        print('response', response)
+        print('Received response: status_code="{:d}" content="{:s}"'.format(response.status_code, response.content))
