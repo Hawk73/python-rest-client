@@ -13,14 +13,14 @@ class Client:
     def get_lists(self, resources_name):
         url = self._make_url('/{:s}/'.format(resources_name))
         self._log_request(url)
-        response = self._get_request(url)
+        response = self._make_get_request(url)
         self._log_response(response)
         return self.decoded_response(response)
 
     def get(self, resources_name, resource_id):
         url = self._make_url('/{:s}/{:d}/'.format(resources_name, resource_id))
         self._log_request(url)
-        response = self._get_request(url)
+        response = self._make_get_request(url)
         self._log_response(response)
         return self.decoded_response(response)
 
@@ -36,7 +36,7 @@ class Client:
     def _make_url(self, path):
         return self.base_url + path
 
-    def _get_request(self, url):
+    def _make_get_request(self, url):
         kwargs = {}
         if self.username is not None:
             kwargs['auth'] = HTTPBasicAuth(self.username, self.password)
