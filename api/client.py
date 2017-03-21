@@ -33,8 +33,10 @@ class Client:
     def _make_url(self, path):
         return self.base_url + path
 
-    def _log_request(self, url):
+    @staticmethod
+    def _log_request(url):
         print('request', url)
 
-    def _log_response(self, response):
+    @staticmethod
+    def _log_response(response):
         print('response', response)
