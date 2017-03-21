@@ -8,4 +8,4 @@ Feature: Posts
   Scenario: Get lists with invalid credentials
     Given client has invalid credentials
     When make get list request for posts
-    Then it throws 403 error
+    Then it throws unauthorized error
