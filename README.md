@@ -1,13 +1,25 @@
 
-Getting started
+# Getting started
+- Install Python 2.7
+- Clone project
 ```
 git clone git@github.com:Hawk73/python-rest-client.git
+```
+- Create virtual environment
+```
 cd python-rest-client
-virtualenv python-rest-client
-pip install -r requirements.txt
+virtualenv python-rest-client-env
+```
+- Install dependencies
+```
+make install
 ```
 
-Tests
+# Tests
 ```
-behave
+make tests
 ```
+
+# License
+
+MIT
