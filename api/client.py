@@ -18,7 +18,7 @@ class Client:
         return self.decoded_response(response)
 
     def get(self, resources_name, resource_id):
-        url = self._make_url('/{:s}/{:d}/'.format(resources_name, resource_id))
+        url = self._make_url('/{:s}/{:d}/'.format(resources_name, int(resource_id)))
         self._log_request(url)
         response = self._make_get_request(url)
         self._log_response(response)
@@ -44,9 +44,12 @@ class Client:
         self._check_response(response)
         return response
 
-    def _check_response(self, response):
-        if response.status_code == 403 :
+    @staticmethod
+    def _check_response(response):
+        if response.status_code == 403:
             raise errors.UnauthorizedError()
+        if response.status_code == 404:
+            raise errors.NotFoundError()
 
     @staticmethod
     def decoded_response(response):
@@ -54,8 +57,8 @@ class Client:
 
     @staticmethod
     def _log_request(url):
-        print('Making request to url="{:s}"'.format(url))
+        print('\nMaking request to url="{:s}"'.format(url))
 
     @staticmethod
     def _log_response(response):
-        print('Received response: status_code="{:d}" content="{:s}"'.format(response.status_code, response.content))
+        print('\nReceived response: status_code="{:d}" content="{:s}"'.format(response.status_code, response.content))
