@@ -20,6 +20,9 @@ make install
 make tests
 ```
 
+# How to use
+You can find examples in `example.py` file.
+
 # License
 
 MIT
