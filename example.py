@@ -28,7 +28,8 @@ post_model.get_lists()
 
 
 # Get resource by ID
-post_model.get(1)
+post_id = 1
+post_model.get(post_id)
 
 # Example:
 # {
@@ -46,6 +47,17 @@ post_model.create(params)
 # Example:
 # {
 #   "id": 101
+# }
+
+
+# Update resource
+post_id = 1
+params = {'id': post_id, 'title': 'Test2'}
+post_model.update(id, params)
+
+# Example:
+# {
+#   "id": 1
 # }
 
 

@@ -28,8 +28,11 @@ class Client:
         self._log_response(response)
         return self.decoded_response(response)
 
-    def put(self, resources_name, data):
-        pass
+    def put(self, resources_name, resource_id, params):
+        url = self._make_url('/{:s}/{:d}/'.format(resources_name, int(resource_id)))
+        response = self._make_put_request(url, params)
+        self._log_response(response)
+        return self.decoded_response(response)
 
     def delete(self, resources_name, id):
         pass
@@ -42,6 +45,9 @@ class Client:
 
     def _make_post_request(self, url, params):
         return self._make_request('post', url, params)
+
+    def _make_put_request(self, url, params):
+        return self._make_request('put', url, params)
 
     def _make_request(self, method, url, params):
         kwargs = {}
@@ -62,6 +68,8 @@ class Client:
     @staticmethod
     def decoded_response(response):
         return json.loads(response.text)
+
+    # TODO: print log to file
 
     @staticmethod
     def _log_request(method, url, params):

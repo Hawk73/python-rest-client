@@ -48,13 +48,13 @@ def stub_get_resources_request(mocker, status_code=200):
     mocker.get('{:s}/posts/'.format(BASE_URL), **kwargs)
 
 
-def stub_get_resource_request(mocker, id, status_code=200):
+def stub_get_resource_request(mocker, resource_id, status_code=200):
     kwargs = {
         'status_code': status_code,
     }
     if status_code == 200:
         kwargs['json'] = RESOURCE_JSON
-    mocker.get('{:s}/posts/{:d}/'.format(BASE_URL, id), **kwargs)
+    mocker.get('{:s}/posts/{:d}/'.format(BASE_URL, resource_id), **kwargs)
 
 
 def stub_create_resource_request(mocker, status_code=200):
@@ -64,6 +64,15 @@ def stub_create_resource_request(mocker, status_code=200):
     if status_code == 200:
         kwargs['json'] = ID_JSON
     mocker.post('{:s}/posts/'.format(BASE_URL), **kwargs)
+
+
+def stub_update_resource_request(mocker, resource_id, status_code=200):
+    kwargs = {
+        'status_code': status_code,
+    }
+    if status_code == 200:
+        kwargs['json'] = ID_JSON
+    mocker.put('{:s}/posts/{:d}/'.format(BASE_URL, resource_id), **kwargs)
 
 
 @given('client has valid credentials')
@@ -118,6 +127,17 @@ def step_make_create_resource_request_for_posts(context):
         context.exc = e
 
 
+@when('make update resource request for posts')
+def step_make_update_resource_request_for_posts(context):
+    try:
+        context.exc = None
+        with requests_mock.Mocker() as mocker:
+            stub_update_resource_request(mocker, TEST_ID, context.status_code)
+            context.result = context.subject.update(TEST_ID, NEW_RESOURCE_DATA)
+    except api.errors.ApiError, e:
+        context.exc = e
+
+
 @then('it does not have error')
 def step_it_does_not_have_error(context):
     assert_that(context.exc, equal_to(None))
@@ -138,6 +158,11 @@ def step_it_returns_resource(context):
 @then('it returns ID')
 def step_it_returns_id(context):
     assert_that(context.result, equal_to(TEST_ID))
+
+
+@then('it returns True')
+def step_it_returns_true(context):
+    assert_that(context.result, equal_to(True))
 
 
 @then('it throws unauthorized error')
