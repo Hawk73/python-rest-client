@@ -12,20 +12,21 @@ class Client:
 
     def get_lists(self, resources_name):
         url = self._make_url('/{:s}/'.format(resources_name))
-        self._log_request(url)
         response = self._make_get_request(url)
         self._log_response(response)
         return self.decoded_response(response)
 
     def get(self, resources_name, resource_id):
         url = self._make_url('/{:s}/{:d}/'.format(resources_name, int(resource_id)))
-        self._log_request(url)
         response = self._make_get_request(url)
         self._log_response(response)
         return self.decoded_response(response)
 
-    def post(self, resources_name, data):
-        pass
+    def post(self, resources_name, params):
+        url = self._make_url('/{:s}/'.format(resources_name))
+        response = self._make_post_request(url, params)
+        self._log_response(response)
+        return self.decoded_response(response)
 
     def put(self, resources_name, data):
         pass
@@ -37,10 +38,17 @@ class Client:
         return self.base_url + path
 
     def _make_get_request(self, url):
+        return self._make_request('get', url, None)
+
+    def _make_post_request(self, url, params):
+        return self._make_request('post', url, params)
+
+    def _make_request(self, method, url, params):
         kwargs = {}
         if self.username is not None:
             kwargs['auth'] = HTTPBasicAuth(self.username, self.password)
-        response = requests.get(url, None, **kwargs)
+        self._log_request(method, url, params)
+        response = requests.request(method, url, params=params, **kwargs)
         self._check_response(response)
         return response
 
@@ -56,8 +64,9 @@ class Client:
         return json.loads(response.text)
 
     @staticmethod
-    def _log_request(url):
-        print('\nMaking request to url="{:s}"'.format(url))
+    def _log_request(method, url, params):
+        print('\nMaking {:s} request to url="{:s}" with data:'.format(method, url))
+        print(params)
 
     @staticmethod
     def _log_response(response):

@@ -8,8 +8,9 @@ class AbstractModel:
     def get(self, resource_id):
         return self.api_client.get(self._resources_name(), resource_id)
 
-    def post(self, data):
-        return self.api_client.post(self._resources_name(), data)
+    def create(self, data):
+        response = self.api_client.post(self._resources_name(), data)
+        return response['id']
 
     def put(self, data):
         return self.api_client.post(self._resources_name(), data)

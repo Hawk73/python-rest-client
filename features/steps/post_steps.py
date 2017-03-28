@@ -8,7 +8,7 @@ import requests_mock
 
 BASE_URL = 'http://localhost'
 # TODO: create factory
-POSTS_JSON = [
+RESOURCES_JSON = [
   {
     "userId": 1,
     "id": 1,
@@ -23,12 +23,20 @@ POSTS_JSON = [
   }
 ]
 TEST_ID = 1
-POST_JSON = {
+RESOURCE_JSON = {
     "userId": 1,
     "id": TEST_ID,
     "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
     "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas"
-  }
+}
+NEW_RESOURCE_DATA = {
+    "userId": 1,
+    "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+    "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas"
+}
+ID_JSON = {
+    "id": TEST_ID
+}
 
 
 def stub_get_resources_request(mocker, status_code=200):
@@ -36,8 +44,8 @@ def stub_get_resources_request(mocker, status_code=200):
         'status_code': status_code,
     }
     if status_code == 200:
-        kwargs['json'] = POSTS_JSON
-    mocker.get(BASE_URL + '/posts/', **kwargs)
+        kwargs['json'] = RESOURCES_JSON
+    mocker.get('{:s}/posts/'.format(BASE_URL), **kwargs)
 
 
 def stub_get_resource_request(mocker, id, status_code=200):
@@ -45,8 +53,17 @@ def stub_get_resource_request(mocker, id, status_code=200):
         'status_code': status_code,
     }
     if status_code == 200:
-        kwargs['json'] = POST_JSON
+        kwargs['json'] = RESOURCE_JSON
     mocker.get('{:s}/posts/{:d}/'.format(BASE_URL, id), **kwargs)
+
+
+def stub_create_resource_request(mocker, status_code=200):
+    kwargs = {
+        'status_code': status_code,
+    }
+    if status_code == 200:
+        kwargs['json'] = ID_JSON
+    mocker.post('{:s}/posts/'.format(BASE_URL), **kwargs)
 
 
 @given('client has valid credentials')
@@ -80,7 +97,7 @@ def step_make_get_list_request_for_posts(context):
 
 
 @when('make get resource request for posts')
-def step_make_get_list_request_for_posts(context):
+def step_make_get_resource_request_for_posts(context):
     try:
         context.exc = None
         with requests_mock.Mocker() as mocker:
@@ -90,18 +107,37 @@ def step_make_get_list_request_for_posts(context):
         context.exc = e
 
 
+@when('make create resource request for posts')
+def step_make_create_resource_request_for_posts(context):
+    try:
+        context.exc = None
+        with requests_mock.Mocker() as mocker:
+            stub_create_resource_request(mocker, context.status_code)
+            context.result = context.subject.create(NEW_RESOURCE_DATA)
+    except api.errors.ApiError, e:
+        context.exc = e
+
+
+@then('it does not have error')
+def step_it_does_not_have_error(context):
+    assert_that(context.exc, equal_to(None))
+
+
 @then('it returns not empty list')
 def step_it_returns_not_empty_list(context):
-    assert_that(context.exc, equal_to(None))
-    assert_that(context.result, equal_to(POSTS_JSON))
+    assert_that(context.result, equal_to(RESOURCES_JSON))
     assert_that(len(context.result), equal_to(2))
 
 
 @then('it returns resource')
-def step_it_returns_not_empty_list(context):
-    assert_that(context.exc, equal_to(None))
-    assert_that(context.result, equal_to(POST_JSON))
+def step_it_returns_resource(context):
+    assert_that(context.result, equal_to(RESOURCE_JSON))
     assert_that(context.result['id'], equal_to(TEST_ID))
+
+
+@then('it returns ID')
+def step_it_returns_id(context):
+    assert_that(context.result, equal_to(TEST_ID))
 
 
 @then('it throws unauthorized error')
