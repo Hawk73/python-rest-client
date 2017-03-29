@@ -61,6 +61,13 @@ post_model.update(id, params)
 # }
 
 
+# Delete resource by ID
+post_id = 1
+post_model.delete(post_id)
+
+# Example:
+# { }
+
 
 # TODO: complete example
 # blog_post = api.PostModel(title='Test') #создание записи

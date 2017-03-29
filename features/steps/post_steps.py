@@ -8,7 +8,7 @@ import requests_mock
 
 BASE_URL = 'http://localhost'
 # TODO: create factory
-RESOURCES_JSON = [
+JSON_RESPONSE_FOR_GET_RESOURCES = [
   {
     "userId": 1,
     "id": 1,
@@ -23,7 +23,7 @@ RESOURCES_JSON = [
   }
 ]
 TEST_ID = 1
-RESOURCE_JSON = {
+JSON_RESPONSE_FOR_GET_RESOURCE = {
     "userId": 1,
     "id": TEST_ID,
     "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
@@ -37,6 +37,7 @@ NEW_RESOURCE_DATA = {
 ID_JSON = {
     "id": TEST_ID
 }
+JSON_RESPONSE_FOR_DELETE_RESOURCE = { }
 
 
 def stub_get_resources_request(mocker, status_code=200):
@@ -44,7 +45,7 @@ def stub_get_resources_request(mocker, status_code=200):
         'status_code': status_code,
     }
     if status_code == 200:
-        kwargs['json'] = RESOURCES_JSON
+        kwargs['json'] = JSON_RESPONSE_FOR_GET_RESOURCES
     mocker.get('{:s}/posts/'.format(BASE_URL), **kwargs)
 
 
@@ -53,7 +54,7 @@ def stub_get_resource_request(mocker, resource_id, status_code=200):
         'status_code': status_code,
     }
     if status_code == 200:
-        kwargs['json'] = RESOURCE_JSON
+        kwargs['json'] = JSON_RESPONSE_FOR_GET_RESOURCE
     mocker.get('{:s}/posts/{:d}/'.format(BASE_URL, resource_id), **kwargs)
 
 
@@ -73,6 +74,15 @@ def stub_update_resource_request(mocker, resource_id, status_code=200):
     if status_code == 200:
         kwargs['json'] = ID_JSON
     mocker.put('{:s}/posts/{:d}/'.format(BASE_URL, resource_id), **kwargs)
+
+
+def stub_delete_resource_request(mocker, resource_id, status_code=200):
+    kwargs = {
+        'status_code': status_code,
+    }
+    if status_code == 200:
+        kwargs['json'] = JSON_RESPONSE_FOR_DELETE_RESOURCE
+    mocker.delete('{:s}/posts/{:d}/'.format(BASE_URL, resource_id), **kwargs)
 
 
 @given('client has valid credentials')
@@ -138,6 +148,17 @@ def step_make_update_resource_request_for_posts(context):
         context.exc = e
 
 
+@when('make delete resource request for posts')
+def step_make_get_resource_request_for_posts(context):
+    try:
+        context.exc = None
+        with requests_mock.Mocker() as mocker:
+            stub_delete_resource_request(mocker, TEST_ID, context.status_code)
+            context.result = context.subject.delete(TEST_ID)
+    except api.errors.ApiError, e:
+        context.exc = e
+
+
 @then('it does not have error')
 def step_it_does_not_have_error(context):
     assert_that(context.exc, equal_to(None))
@@ -145,13 +166,13 @@ def step_it_does_not_have_error(context):
 
 @then('it returns not empty list')
 def step_it_returns_not_empty_list(context):
-    assert_that(context.result, equal_to(RESOURCES_JSON))
+    assert_that(context.result, equal_to(JSON_RESPONSE_FOR_GET_RESOURCES))
     assert_that(len(context.result), equal_to(2))
 
 
 @then('it returns resource')
 def step_it_returns_resource(context):
-    assert_that(context.result, equal_to(RESOURCE_JSON))
+    assert_that(context.result, equal_to(JSON_RESPONSE_FOR_GET_RESOURCE))
     assert_that(context.result['id'], equal_to(TEST_ID))
 
 

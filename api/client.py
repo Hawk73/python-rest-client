@@ -34,8 +34,11 @@ class Client:
         self._log_response(response)
         return self.decoded_response(response)
 
-    def delete(self, resources_name, id):
-        pass
+    def delete(self, resources_name, resource_id):
+        url = self._make_url('/{:s}/{:d}/'.format(resources_name, int(resource_id)))
+        response = self._make_delete_request(url)
+        self._log_response(response)
+        return self.decoded_response(response)
 
     def _make_url(self, path):
         return self.base_url + path
@@ -48,6 +51,9 @@ class Client:
 
     def _make_put_request(self, url, params):
         return self._make_request('put', url, params)
+
+    def _make_delete_request(self, url):
+        return self._make_request('delete', url, None)
 
     def _make_request(self, method, url, params):
         kwargs = {}

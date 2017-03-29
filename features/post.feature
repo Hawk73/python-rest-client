@@ -66,3 +66,23 @@ Feature: Posts
     Given client has invalid credentials
     When make update resource request for posts
     Then it throws unauthorized error
+
+
+  # Delete resource
+
+  Scenario: Delete resource with valid credentials
+    Given client has valid credentials
+    When make delete resource request for posts
+    Then it does not have error
+    Then it returns True
+
+  Scenario: Delete nonexistent resource with valid credentials
+    Given client has valid credentials
+    Given resource does not exist
+    When make Delete resource request for posts
+    Then it throws not found error
+
+  Scenario: Delete resource with invalid credentials
+    Given client has invalid credentials
+    When make Delete resource request for posts
+    Then it throws unauthorized error

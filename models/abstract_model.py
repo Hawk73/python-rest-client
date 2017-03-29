@@ -26,8 +26,9 @@ class AbstractModel:
         return response['id'] == resource_id
 
     # TODO: create two methods static and for instance
-    def delete(self, id):
-        return self.api_client.delete(self._resources_name(), id)
+    def delete(self, resource_id):
+        response = self.api_client.delete(self._resources_name(), resource_id)
+        return response == {}
 
     def _resources_name(self):
         raise NotImplementedError("AbstractModel does not have _resources_name!")
