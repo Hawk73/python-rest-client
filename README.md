@@ -31,7 +31,7 @@ make tests
 
 # Publish package
 ```
-python setup.py sdist upload
+make publish
 ```
 
 # License
