@@ -1,3 +1,6 @@
+# (!) This package is test task.
+
+
 # Requirements
 - Python 2.7
 
