@@ -1,9 +1,9 @@
-import api.client
-import models.post
+import pythonrestclient.api.client
+import pythonrestclient.models.post
 
 
-api_client = api.client.Client('https://jsonplaceholder.typicode.com', 'user', 'pass')
-post_model = models.post.Post(api_client)
+api_client = pythonrestclient.api.client.Client('https://jsonplaceholder.typicode.com', 'user', 'pass')
+post_model = pythonrestclient.models.post.Post(api_client)
 
 
 # Get resources

@@ -1,4 +1,13 @@
+# Compiled python modules.
 *.pyc
 
-# sphinx build folder
+# Setuptools distribution folder.
+/dist/
+
+# Python egg metadata, regenerated from source files by setuptools.
+/*.egg-info
+
+# Sphinx build folder
 doc/_build/
+
+/python-rest-client-env

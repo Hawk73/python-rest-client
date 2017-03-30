@@ -1,6 +1,15 @@
+# Requirements
+- Python 2.7
 
-# Getting started
-- Install Python 2.7
+# Install package
+```
+pip install pythonrestclient
+```
+
+# How to use
+You can find examples in `example.py` file.
+
+# Develop
 - Clone project
 ```
 git clone git@github.com:Hawk73/python-rest-client.git
@@ -20,8 +29,10 @@ make install
 make tests
 ```
 
-# How to use
-You can find examples in `example.py` file.
+# Publish package
+```
+python setup.py sdist upload
+```
 
 # License
 
