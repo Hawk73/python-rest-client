@@ -1,33 +1,35 @@
+from collection_class import CollectionClass
+from pythonrestclient.service_factory import ServiceFactory
+
 class AbstractModel:
-    def __init__(self, api_client):
-        # TODO: convert to class variable
-        self.api_client = api_client
+    def __init__(self):
+        pass
 
     # TODO: convert to static
     def get_lists(self):
-        # TODO: return CollectionClass
-        return self.api_client.get_lists(self._resources_name())
+        items = ServiceFactory.api_client.get_lists(self._resources_name())
+        return CollectionClass(items)
 
     # TODO: convert to static
     def get(self, resource_id):
         # TODO: return instance of model
-        return self.api_client.get(self._resources_name(), resource_id)
+        return ServiceFactory.api_client.get(self._resources_name(), resource_id)
 
     # TODO: convert to static
     def create(self, attributes):
         self._validate_presence_of_required_attributes(attributes)
-        response = self.api_client.post(self._resources_name(), attributes)
+        response = ServiceFactory.api_client.post(self._resources_name(), attributes)
         # TODO: return instance of model
         return response['id']
 
     # TODO: create two methods static and for instance
-    def update(self, resource_id, data):
-        response = self.api_client.put(self._resources_name(), resource_id, data)
+    def update(self, resource_id, attributes):
+        response = ServiceFactory.api_client.put(self._resources_name(), resource_id, attributes)
         return response['id'] == resource_id
 
     # TODO: create two methods static and for instance
     def delete(self, resource_id):
-        response = self.api_client.delete(self._resources_name(), resource_id)
+        response = ServiceFactory.api_client.delete(self._resources_name(), resource_id)
         return response == {}
 
     def _resources_name(self):

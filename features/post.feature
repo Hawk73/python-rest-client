@@ -1,4 +1,6 @@
 Feature: Posts
+  Background: init
+    Given init API client
 
   # Get resources
 

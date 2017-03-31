@@ -1,8 +1,6 @@
 from behave import *
 from hamcrest import *
-import pythonrestclient.api.client
-import pythonrestclient.api.errors
-import pythonrestclient.models.post
+import pythonrestclient
 import requests_mock
 
 
@@ -85,17 +83,19 @@ def stub_delete_resource_request(mocker, resource_id, status_code=200):
     mocker.delete('{:s}/posts/{:d}/'.format(BASE_URL, resource_id), **kwargs)
 
 
+@given('init API client')
+def step_init_api_client(context):
+    pythonrestclient.ServiceFactory.init_api_client(BASE_URL, 'username', 'password')
+    context.subject = pythonrestclient.PostModel()
+
+
 @given('client has valid credentials')
 def step_client_has_valid_credentials(context):
-    api_client = pythonrestclient.api.client.Client(BASE_URL, 'username', 'password')
-    context.subject = pythonrestclient.models.post.Post(api_client)
     context.status_code = 200
 
 
 @given('client has invalid credentials')
 def step_client_has_invalid_credentials(context):
-    api_client = pythonrestclient.api.client.Client(BASE_URL, 'username', 'password')
-    context.subject = pythonrestclient.models.post.Post(api_client)
     context.status_code = 403
 
 
@@ -166,8 +166,8 @@ def step_it_does_not_have_error(context):
 
 @then('it returns not empty list')
 def step_it_returns_not_empty_list(context):
-    assert_that(context.result, equal_to(JSON_RESPONSE_FOR_GET_RESOURCES))
-    assert_that(len(context.result), equal_to(2))
+    assert_that(context.result.items, equal_to(JSON_RESPONSE_FOR_GET_RESOURCES))
+    assert_that(len(context.result.items), equal_to(2))
 
 
 @then('it returns resource')

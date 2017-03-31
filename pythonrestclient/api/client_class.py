@@ -4,8 +4,8 @@ import errors
 from requests.auth import HTTPBasicAuth
 
 
-class Client:
-    def __init__(self, base_url, username = None, password = None):
+class ClientClass:
+    def __init__(self, base_url, username=None, password=None):
         self.base_url = base_url
         self.username = username
         self.password = password
