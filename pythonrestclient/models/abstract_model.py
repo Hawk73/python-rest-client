@@ -1,6 +1,7 @@
 from collection_class import CollectionClass
 from pythonrestclient.service_factory import ServiceFactory
 
+
 class AbstractModel:
     def __init__(self):
         pass
