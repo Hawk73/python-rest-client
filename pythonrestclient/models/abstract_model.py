@@ -11,7 +11,12 @@ class AbstractModel:
 
     @classmethod
     def all(cls):
-        response = ServiceFactory.api_client.get_resources(cls.resources_name())
+        return cls.filter(None)
+
+    # TODO: add tests
+    @classmethod
+    def filter(cls, params):
+        response = ServiceFactory.api_client.get_resources(cls.resources_name(), params)
         items = list(map(lambda attributes: cls(attributes), response))
         return CollectionClass(items)
 
