@@ -30,6 +30,8 @@ post.delete()
 
 
 # Manage resources
+# get all
+collection_of_posts = pythonrestclient.PostModel.all()
 # get resource with filter, for example, get all items where userId=2
 collection_of_posts = pythonrestclient.PostModel.filter({'userId': 2})
 
