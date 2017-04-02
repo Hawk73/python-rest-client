@@ -1,70 +1,41 @@
 import pythonrestclient
 
 pythonrestclient.ServiceFactory.init_api_client('https://jsonplaceholder.typicode.com', 'username', 'password')
-post_model = pythonrestclient.PostModel()
-
-
-# Get resources
-post_model.get_lists()
-
-# Example:
-# [
-#   {
-#     "userId": 1,
-#     "id": 1,
-#     "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-#     "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
-#   },
-#   {
-#     "userId": 1,
-#     "id": 2,
-#     "title": "qui est esse",
-#     "body": "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla"
-#   },
-#   ...
-# ]
-
-
-# Get resource by ID
-post_id = 1
-post_model.get(post_id)
-
-# Example:
-# {
-#   "userId": 1,
-#   "id": 1,
-#   "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-#   "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
-# }
-
 
 # Create resource
-params = {'title': 'Test'}
-post_model.create(params)
-
-# Example:
-# {
-#   "id": 101
-# }
+attributes = {'title': 'Test'}
+# TODO: return instance of PostModel
+pythonrestclient.PostModel.create(attributes)
 
 
-# Update resource
+# Manage by ID
 post_id = 1
-params = {'id': post_id, 'title': 'Test2'}
-post_model.update(id, params)
+# get - returns instance of PostModel
+pythonrestclient.PostModel.get(post_id)
+# update - returns True if received ID equals post_id
+new_attributes = {'title': 'Test2'}
+# TODO: rename to update_by_id
+pythonrestclient.PostModel.update(post_id, attributes)
+# delete - returns True if response has no errors
+pythonrestclient.PostModel.delete_by_id(post_id)
 
-# Example:
-# {
-#   "id": 1
-# }
 
-
-# Delete resource by ID
+# Manage resource
 post_id = 1
-post_model.delete(post_id)
+post = pythonrestclient.PostModel.get(post_id)
 
-# Example:
-# { }
+# update
+# TODO: implement
+
+# delete
+post.delete()
+
+
+# Manage resources
+collection_of_posts = pythonrestclient.PostModel.get_lists()
+
+# delete all - delete all items from current collection
+collection_of_posts.delete_all()
 
 
 # TODO: complete example

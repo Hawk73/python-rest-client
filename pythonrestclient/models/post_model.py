@@ -2,5 +2,6 @@ import abstract_model
 
 
 class PostModel(abstract_model.AbstractModel):
-    def _resources_name(self):
+    @classmethod
+    def resources_name(cls):
         return 'posts'

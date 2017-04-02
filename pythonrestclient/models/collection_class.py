@@ -6,11 +6,7 @@ class CollectionClass:
         self.items
 
     def delete_all(self):
-        for item in self.items:
-            self.delete(item['id'])
-
-    def delete(self, id):
-        if self.items[id]:
-            return self.items[id].delete()
-        else:
-            return True
+        while len(self.items) > 0:
+            item = self.items.pop()
+            item.delete()
+        return True
