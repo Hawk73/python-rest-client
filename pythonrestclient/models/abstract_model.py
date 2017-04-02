@@ -20,12 +20,15 @@ class AbstractModel:
         response = ServiceFactory.api_client.get(cls.resources_name(), resource_id)
         return cls(response)
 
-    # TODO: convert to static
-    def create(self, attributes):
-        self._validate_presence_of_required_attributes(attributes)
-        response = ServiceFactory.api_client.post(self.resources_name(), attributes)
-        # TODO: return instance of model
-        return response['id']
+    @classmethod
+    def create(cls, attributes):
+        cls._validate_presence_of_required_attributes(attributes)
+        response = ServiceFactory.api_client.post(cls.resources_name(), attributes)
+        if response['id']:
+            merged_attributes = cls.merge_two_dicts(response, attributes)
+            return cls(merged_attributes)
+        else:
+            return None
 
     # TODO: create two methods static and for instance
     def update(self, resource_id, attributes):
@@ -45,6 +48,13 @@ class AbstractModel:
     def resources_name(cls):
         raise NotImplementedError("AbstractModel does not have _resources_name!")
 
-    # TODO: implement _validate_presence_of_required_params
-    def _validate_presence_of_required_attributes(self, attributes):
+    @classmethod
+    def _validate_presence_of_required_attributes(cls, attributes):
+        # TODO: implement _validate_presence_of_required_params
         pass
+
+    @staticmethod
+    def merge_two_dicts(x, y):
+        z = x.copy()
+        z.update(y)
+        return z

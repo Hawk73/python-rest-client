@@ -38,7 +38,7 @@ def step_make_create_resource_request_for_posts(context):
         context.exc = None
         with requests_mock.Mocker() as mocker:
             stub_create_resource_request(mocker, context.status_code)
-            context.result = context.subject.create(NEW_RESOURCE_DATA)
+            context.result = context.subject_class.create(NEW_RESOURCE_DATA)
     except pythonrestclient.api.errors.ApiError, e:
         context.exc = e
 

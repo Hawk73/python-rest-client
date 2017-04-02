@@ -2,9 +2,8 @@ import pythonrestclient
 
 pythonrestclient.ServiceFactory.init_api_client('https://jsonplaceholder.typicode.com', 'username', 'password')
 
-# Create resource
+# Create resource - returns instance of PostModel
 attributes = {'title': 'Test'}
-# TODO: return instance of PostModel
 pythonrestclient.PostModel.create(attributes)
 
 

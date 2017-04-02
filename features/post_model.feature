@@ -43,7 +43,7 @@ Feature: Post model
     Given client has valid credentials
     When make create resource request for posts
     Then it does not have error
-    Then it returns ID
+    Then it returns resource of post
 
   Scenario: Create resource with invalid credentials
     Given client has invalid credentials
