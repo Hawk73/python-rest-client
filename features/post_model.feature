@@ -51,23 +51,23 @@ Feature: Post model
     Then it throws unauthorized error
 
 
-  # Update resource
+  # Update resource by ID
 
   Scenario: Update resource with valid credentials
     Given client has valid credentials
-    When make update resource request for posts
+    When make update resource by ID request for posts
     Then it does not have error
     Then it returns True
 
   Scenario: Update nonexistent resource with valid credentials
     Given client has invalid credentials
     Given resource does not exist
-    When make update resource request for posts
+    When make update resource by ID request for posts
     Then it throws not found error
 
   Scenario: Update resource with invalid credentials
     Given client has invalid credentials
-    When make update resource request for posts
+    When make update resource by ID request for posts
     Then it throws unauthorized error
 
 

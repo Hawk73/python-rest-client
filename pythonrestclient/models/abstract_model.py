@@ -25,14 +25,22 @@ class AbstractModel:
         cls._validate_presence_of_required_attributes(attributes)
         response = ServiceFactory.api_client.post(cls.resources_name(), attributes)
         if response['id']:
-            merged_attributes = cls.merge_two_dicts(response, attributes)
+            merged_attributes = cls.merge_two_dicts(attributes, response)
             return cls(merged_attributes)
         else:
             return None
 
-    # TODO: create two methods static and for instance
-    def update(self, resource_id, attributes):
-        response = ServiceFactory.api_client.put(self.resources_name(), resource_id, attributes)
+    # TODO: add tests
+    def update(self, new_attributes):
+        if self.__class__.update_by_id(self.attributes['id'], new_attributes):
+            self.attributes = self.merge_two_dicts(self.attributes, new_attributes)
+            return True
+        else:
+            return False
+
+    @classmethod
+    def update_by_id(cls, resource_id, new_attributes):
+        response = ServiceFactory.api_client.put(cls.resources_name(), resource_id, new_attributes)
         return response['id'] == resource_id
 
     def delete(self):

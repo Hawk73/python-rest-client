@@ -13,8 +13,7 @@ post_id = 1
 pythonrestclient.PostModel.get(post_id)
 # update - returns True if received ID equals post_id
 new_attributes = {'title': 'Test2'}
-# TODO: rename to update_by_id
-pythonrestclient.PostModel.update(post_id, attributes)
+pythonrestclient.PostModel.update_by_id(post_id, attributes)
 # delete - returns True if response has no errors
 pythonrestclient.PostModel.delete_by_id(post_id)
 
