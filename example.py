@@ -32,7 +32,7 @@ post.delete()
 
 
 # Manage resources
-collection_of_posts = pythonrestclient.PostModel.get_lists()
+collection_of_posts = pythonrestclient.PostModel.all()
 
 # delete all - delete all items from current collection
 collection_of_posts.delete_all()

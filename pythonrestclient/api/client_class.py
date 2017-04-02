@@ -10,9 +10,9 @@ class ClientClass:
         self.username = username
         self.password = password
 
-    def get_lists(self, resources_name):
+    def get_resources(self, resources_name, params=None):
         url = self._make_url('/{:s}/'.format(resources_name))
-        response = self._make_get_request(url)
+        response = self._make_get_request(url, params)
         self._log_response(response)
         return self.decoded_response(response)
 
@@ -43,8 +43,8 @@ class ClientClass:
     def _make_url(self, path):
         return self.base_url + path
 
-    def _make_get_request(self, url):
-        return self._make_request('get', url, None)
+    def _make_get_request(self, url, params=None):
+        return self._make_request('get', url, params)
 
     def _make_post_request(self, url, params):
         return self._make_request('post', url, params)

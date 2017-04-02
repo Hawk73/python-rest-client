@@ -10,8 +10,8 @@ class AbstractModel:
         return self.attributes
 
     @classmethod
-    def get_lists(cls):
-        response = ServiceFactory.api_client.get_lists(cls.resources_name())
+    def all(cls):
+        response = ServiceFactory.api_client.get_resources(cls.resources_name())
         items = list(map(lambda attributes: cls(attributes), response))
         return CollectionClass(items)
 

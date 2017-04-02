@@ -9,7 +9,7 @@ import requests_mock
 def step_init_collection(context):
     with requests_mock.Mocker() as mocker:
         stub_get_resources_request(mocker)
-        context.subject = pythonrestclient.PostModel.get_lists()
+        context.subject = pythonrestclient.PostModel.all()
 
 
 @when('delete all items')

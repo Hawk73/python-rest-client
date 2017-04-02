@@ -3,17 +3,17 @@ Feature: Post model
     Given init API client
     Given init post model
 
-  # Get resources
+  # Get all resources
 
   Scenario: Get lists with valid credentials
     Given client has valid credentials
-    When make get list request for posts
+    When make get all request for posts
     Then it does not have error
     Then it returns collection of posts
 
   Scenario: Get lists with invalid credentials
     Given client has invalid credentials
-    When make get list request for posts
+    When make get all request for posts
     Then it throws unauthorized error
 
 

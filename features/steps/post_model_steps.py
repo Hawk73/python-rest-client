@@ -10,13 +10,13 @@ def step_init_post_model(context):
     context.subject_class = pythonrestclient.PostModel
 
 
-@when('make get list request for posts')
-def step_make_get_list_request_for_posts(context):
+@when('make get all request for posts')
+def step_make_get_all_request_for_posts(context):
     try:
         context.exc = None
         with requests_mock.Mocker() as mocker:
             stub_get_resources_request(mocker, context.status_code)
-            context.result = context.subject_class.get_lists()
+            context.result = context.subject_class.all()
     except pythonrestclient.api.errors.ApiError, e:
         context.exc = e
 
