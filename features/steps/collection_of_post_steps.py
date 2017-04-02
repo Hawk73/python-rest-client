@@ -24,6 +24,11 @@ def step_delete_all_items(context):
         context.exc = e
 
 
+@when('get first item')
+def step_get_first_item(context):
+    context.exc = None
+    context.result = context.subject.first()
+
 
 @then('it has no items')
 def step_it_has_no_items(context):
