@@ -18,7 +18,7 @@ class AbstractModel:
     def filter(cls, params):
         response = ServiceFactory.api_client.get_resources(cls.resources_name(), params)
         items = list(map(lambda attributes: cls(attributes), response))
-        return CollectionClass(items)
+        return CollectionClass(items, params)
 
     @classmethod
     def get(cls, resource_id):
