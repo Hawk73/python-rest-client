@@ -1,17 +1,29 @@
 import requests
 import json
+import sys
 import errors
+import logging
 from requests.auth import HTTPBasicAuth
 
 
 class ClientClass:
-    def __init__(self, base_url, username=None, password=None, verify=True, custom_headers=None, wo_trailing=False):
+    def __init__(self, base_url, username=None, password=None, verify=True, custom_headers=None, wo_trailing=False, log_level=logging.CRITICAL, log_loc=sys.stdout):
         self.base_url = base_url
         self.username = username
         self.password = password
         self.verify = verify
         self.custom_headers = custom_headers
         self.wo_trailing = wo_trailing
+
+        # Set up logging
+        # Set up the global logger to stdout
+        self.logger = logging.getLogger(__name__)
+        ch = logging.StreamHandler(log_loc)
+        self.logger.setLevel(log_level)
+        ch.setLevel(log_level)
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        ch.setFormatter(formatter)
+        self.logger.addHandler(ch)
 
     def get_resources(self, resources_name, params=None, url_format='/{:s}/'):
         url = self._make_url(url_format.format(resources_name))
@@ -84,17 +96,15 @@ class ClientClass:
     def decoded_response(response):
         return json.loads(response.text)
 
-    # TODO: print log to file
-
     @staticmethod
     def _log_request(method, url, params, data, headers):
-        print('\nMaking {:s} request to url="{:s}" with headers:'.format(method, url))
-        print(headers)
-        print(' and params:')
-        print(params)
-        print(' and data:')
-        print(data)
+        self.logger.debug('\nMaking {:s} request to url="{:s}" with headers:'.format(method, url))
+        self.logger.debug(headers)
+        self.logger.debug(' and params:')
+        self.logger.debug(params)
+        self.logger.debug(' and data:')
+        self.logger.debug(data)
 
     @staticmethod
     def _log_response(response):
-        print('\nReceived response: status_code="{:d}" content="{:s}"'.format(response.status_code, response.content))
+        self.logger.debug('\nReceived response: status_code="{:d}" content="{:s}"'.format(response.status_code, response.content))
