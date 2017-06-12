@@ -96,8 +96,7 @@ class ClientClass:
     def decoded_response(response):
         return json.loads(response.text)
 
-    @staticmethod
-    def _log_request(method, url, params, data, headers):
+    def _log_request(self, method, url, params, data, headers):
         self.logger.debug('\nMaking {:s} request to url="{:s}" with headers:'.format(method, url))
         self.logger.debug(headers)
         self.logger.debug(' and params:')
@@ -105,6 +104,5 @@ class ClientClass:
         self.logger.debug(' and data:')
         self.logger.debug(data)
 
-    @staticmethod
-    def _log_response(response):
+    def _log_response(self, response):
         self.logger.debug('\nReceived response: status_code="{:d}" content="{:s}"'.format(response.status_code, response.content))
