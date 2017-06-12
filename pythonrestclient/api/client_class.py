@@ -67,9 +67,9 @@ class ClientClass:
             kwargs['auth'] = HTTPBasicAuth(self.username, self.password)
         self._log_request(method, url, params, data, self.custom_headers)
         if data:
-            response = requests.request(method, url, headers=self.custom_headers, params=params, data=json.dumps(data), verify=verify, **kwargs)
+            response = requests.request(method, url, headers=self.custom_headers, params=params, data=json.dumps(data), verify=self.verify, **kwargs)
         else:
-            response = requests.request(method, url, headers=self.custom_headers, params=params, verify=verify, **kwargs)
+            response = requests.request(method, url, headers=self.custom_headers, params=params, verify=self.verify, **kwargs)
         self._check_response(response)
         return response
 
