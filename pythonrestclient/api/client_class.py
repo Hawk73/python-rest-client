@@ -5,10 +5,11 @@ from requests.auth import HTTPBasicAuth
 
 
 class ClientClass:
-    def __init__(self, base_url, username=None, password=None, custom_headers=None, wo_trailing=False):
+    def __init__(self, base_url, username=None, password=None, verify=True, custom_headers=None, wo_trailing=False):
         self.base_url = base_url
         self.username = username
         self.password = password
+        self.verify = verify
         self.custom_headers = custom_headers
         self.wo_trailing = wo_trailing
 
@@ -66,9 +67,9 @@ class ClientClass:
             kwargs['auth'] = HTTPBasicAuth(self.username, self.password)
         self._log_request(method, url, params, data, self.custom_headers)
         if data:
-            response = requests.request(method, url, headers=self.custom_headers, params=params, data=json.dumps(data), **kwargs)
+            response = requests.request(method, url, headers=self.custom_headers, params=params, data=json.dumps(data), verify=verify, **kwargs)
         else:
-            response = requests.request(method, url, headers=self.custom_headers, params=params, **kwargs)
+            response = requests.request(method, url, headers=self.custom_headers, params=params, verify=verify, **kwargs)
         self._check_response(response)
         return response
 
