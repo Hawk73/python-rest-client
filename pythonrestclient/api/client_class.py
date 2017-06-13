@@ -7,11 +7,12 @@ from requests.auth import HTTPBasicAuth
 
 
 class ClientClass:
-    def __init__(self, base_url, username=None, password=None, verify=True, custom_headers=None, wo_trailing=False, log_level=logging.CRITICAL, log_loc=sys.stdout):
+    def __init__(self, base_url, username=None, password=None, verify=True, client_cert=None, custom_headers=None, wo_trailing=False, log_level=logging.CRITICAL, log_loc=sys.stdout):
         self.base_url = base_url
         self.username = username
         self.password = password
         self.verify = verify
+        self.client_cert = client_cert
         self.custom_headers = custom_headers
         self.wo_trailing = wo_trailing
 
@@ -77,11 +78,16 @@ class ClientClass:
         kwargs = {}
         if self.username is not None:
             kwargs['auth'] = HTTPBasicAuth(self.username, self.password)
-        self._log_request(method, url, params, data, self.custom_headers)
-        if data:
-            response = requests.request(method, url, headers=self.custom_headers, params=params, data=json.dumps(data), verify=self.verify, **kwargs)
-        else:
-            response = requests.request(method, url, headers=self.custom_headers, params=params, verify=self.verify, **kwargs)
+        if data is not None:
+            kwargs['data'] = json.dumps(data)
+        if self.client_cert is not None:
+            kwargs['cert'] = self.client_cert
+        if self.verify:
+            kwargs['verify'] = self.verify
+   
+        self._log_request(method, url, params, data)
+        response = requests.request(method, url, headers=self.custom_headers, params=params, **kwargs)
+
         self._check_response(response)
         return response
 
@@ -96,12 +102,15 @@ class ClientClass:
     def decoded_response(response):
         return json.loads(response.text)
 
-    def _log_request(self, method, url, params, data, headers):
-        self.logger.debug('\nMaking {:s} request to url="{:s}" with headers:'.format(method, url))
-        self.logger.debug(headers)
-        self.logger.debug(' and params:')
+    def _log_request(self, method, url, params, data):
+        self.logger.debug('\nMaking {:s} request to url="{:s}"'.format(method, url))
+        self.logger.debug('-Client Cert: ')
+        self.logger.debug(self.client_cert)
+        self.logger.debug('-Headers: ')
+        self.logger.debug(self.custom_headers)
+        self.logger.debug('-Params: ')
         self.logger.debug(params)
-        self.logger.debug(' and data:')
+        self.logger.debug('-Data:')
         self.logger.debug(data)
 
     def _log_response(self, response):
