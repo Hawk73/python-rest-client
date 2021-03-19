@@ -5,7 +5,7 @@ behave==1.2.5
 docutils==0.13.1
 enum34==1.1.6
 imagesize==0.7.1
-Jinja2==2.9.5
+Jinja2==2.11.3
 MarkupSafe==1.0
 packaging==16.8
 parse==1.8.0
