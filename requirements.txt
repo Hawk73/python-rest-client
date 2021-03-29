@@ -10,7 +10,7 @@ MarkupSafe==1.0
 packaging==16.8
 parse==1.8.0
 parse-type==0.3.4
-Pygments==2.2.0
+Pygments==2.7.4
 PyHamcrest==1.9.0
 pyparsing==2.2.0
 pytz==2016.10
